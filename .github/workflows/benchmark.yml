@@ -45,8 +45,6 @@ jobs:
       - uses: docker/build-push-action@v2
         with:
           context: ./upstream
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
       - name: Upload Duration
         run: |
           python gha-add-rows.py
