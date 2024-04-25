@@ -15,15 +15,14 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: check 
-        run: |
-          pwd
-          ls
-          printenv
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.9 
+      - name: Download Script
+        run: |
+          wget https://elasticbeanstalk-us-east-1-734046833946.s3.amazonaws.com/gha-add-rows.py
+          chmod +x gha-add-rows.py
       - name: Install dependencies
         run: |
           pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib gspread
@@ -48,3 +47,10 @@ jobs:
           context: ./upstream
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: Upload Duration
+        run: |
+          python gha-add-rows.py
+        env:
+          BASE64_GCP_KEY: ${{ secrets.BASE64_GCP_KEY }}
+          WORKSHEET_INDEX: "3"
+          SPREADSHEET_ID: 13sUF7XxkHP19x4Jm4KrkBZ6448-wZZijEPMXlxjajjA
